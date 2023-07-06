@@ -1,4 +1,4 @@
-package com.rufino.product.model;
+package com.rufino.product.models;
 
 import jakarta.persistence.*;
 
