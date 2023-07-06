@@ -1,12 +1,27 @@
 package com.rufino.product.controllers;
 
-import com.rufino.product.repositories.ProductRepository;
+import com.rufino.product.dtos.ProductRecordDto;
+import com.rufino.product.models.ProductModel;
+import com.rufino.product.services.ProductService;
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
+
+    @PostMapping("/products")
+    public ResponseEntity<ProductModel> save(@RequestBody @Valid ProductRecordDto productRecordDto){
+        var productModel = new ProductModel();
+        BeanUtils.copyProperties(productRecordDto, productModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(productModel));
+    }
 }
