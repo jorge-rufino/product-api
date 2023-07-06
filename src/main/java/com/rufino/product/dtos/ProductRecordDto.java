@@ -1,10 +1,12 @@
 package com.rufino.product.dtos;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
-
 import java.math.BigDecimal;
 
-//Validação dos dados
-public record ProductRecordDto(@NotBlank String name, @PositiveOrZero BigDecimal value) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
+//PositiveOrZero aceita o valor "null", por isso adicionei a anotação "NotNull" tb
+
+public record ProductRecordDto(@NotBlank String name, @NotNull @PositiveOrZero BigDecimal value) {
 }
