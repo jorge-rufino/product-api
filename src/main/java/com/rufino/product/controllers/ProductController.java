@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.service.annotation.PutExchange;
 
 import com.rufino.product.dtos.ProductRecordDto;
 import com.rufino.product.models.ProductModel;
@@ -39,12 +41,25 @@ public class ProductController {
     
     @GetMapping("/products/{idProduct}")
     public ResponseEntity<Object> buscar(@PathVariable UUID idProduct){
-    	ProductModel productModel = productService.buscar(idProduct);
-    	System.out.println(productModel);
+    	var productModel = productService.buscar(idProduct);
+    	
     	if(productModel != null) {
     		return ResponseEntity.status(HttpStatus.OK).body(productModel);
     	} else {
     		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!");
     	}
+    }
+    
+    @PutMapping("/products/{idProduct}")
+    public ResponseEntity<Object> alterar(@PathVariable UUID idProduct, @RequestBody @Valid ProductRecordDto productRecordDto ){
+    	var productModel = productService.buscar(idProduct);
+    	
+    	if(productModel == null) {
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!");
+    	} 
+    	
+    	BeanUtils.copyProperties(productRecordDto, productModel);
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(productService.save(productModel));
     }
 }
