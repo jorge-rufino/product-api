@@ -15,7 +15,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public ProductModel save(ProductModel productModel){
+    public ProductModel salvar(ProductModel productModel){
         return productRepository.save(productModel);
     }
     
@@ -25,5 +25,9 @@ public class ProductService {
     
     public ProductModel buscar(UUID idProduct) {
     	return productRepository.findById(idProduct).orElse(null);
+    }
+    
+    public void deletar(ProductModel product) {    	
+    	productRepository.delete(product);
     }
 }
